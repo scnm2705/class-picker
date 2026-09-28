@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>班级随机点名 · 3D 棋盘 V1.0</title>
+  <link rel="stylesheet" href="style.css"><link rel="stylesheet" href="integrated.css">
+  <script defer src="vendor/three.min.js"></script><script defer src="board-model.js"></script><script defer src="scene.js"></script><script defer src="dice.js"></script><script defer src="probability.js"></script><script defer src="console.js"></script><script defer src="app.js"></script>
+</head>
+<body>
+  <img id="sceneBackdrop" src="assets/starfield.png" alt="" aria-hidden="true" draggable="false">
+  <main id="stage" aria-label="立体棋盘，可按住鼠标拖动，滚轮缩放" tabindex="0">
+    <div id="scene"></div><div id="labels"></div>
+  </main>
+  <header class="hud topbar">
+    <div class="brand"><span class="brand-icon">✦</span><div><h1>班级随机点名</h1><p><span id="className">示例班级</span> <span class="tag">V1.0</span></p></div></div>
+    <div class="stats"><div><span>全班人数</span><b id="total">50</b></div><div><span>已点名</span><b id="called">0</b></div><div><span>剩余</span><b id="remaining">50</b></div></div>
+    <div class="round"><span class="live-dot"></span><span id="modeName">不重复</span> <span class="divider">/</span> 第 <b id="round">1</b> 轮</div>
+  </header>
+  <nav class="hud view-tools" aria-label="视图工具">
+    <button id="zoomIn" title="放大" aria-label="放大">＋</button><span id="zoomText">100%</span><button id="zoomOut" title="缩小" aria-label="缩小">－</button>
+    <span class="rule"></span><button id="fit" title="棋盘总览" aria-label="棋盘总览">⊞</button><button id="locate" title="定位棋子" aria-label="定位棋子">⌖</button>
+    <button id="fullscreen" title="切换全屏（F11）" aria-label="切换全屏">⛶</button>
+  </nav>
+  <div id="loading" class="loading">正在搭建棋盘…</div>
+  <aside class="hud round-people" aria-label="本轮点名名单"><div class="round-people-head"><h2>本轮已点名</h2><span id="roundPeopleCount">0 人</span></div><p id="roundPeopleEmpty">点名结果将在这里显示</p><ol id="roundPeopleList" aria-live="polite"></ol></aside>
+  <div id="toast" role="status" aria-live="polite"></div>
+  <div id="diceStage" class="dice-stage" aria-hidden="true" hidden>
+    <div id="diceShadow" class="dice-shadow"></div>
+    <div id="diceFlight" class="dice-flight"><div class="dice dice-large" id="centerDice"></div></div>
+    <div id="diceLanding" class="dice-landing" hidden><b id="diceValue"></b><span>步</span></div>
+  </div>
+  <div id="revealStage" class="reveal-stage" aria-hidden="true" hidden>
+    <div class="reveal-halo"></div><div class="reveal-sparks"><i>✦</i><i>✦</i><i>✧</i><i>✦</i><i>✧</i><i>✦</i></div>
+    <div class="reveal-content"><p id="revealType"></p><strong id="revealName"></strong><div class="reveal-line"></div></div>
+  </div>
+  <section id="result" class="hud result" aria-live="polite" hidden><span id="resultType">本次点名</span><strong id="resultName"></strong><p id="resultNote"></p><button id="eventAction" hidden></button></section>
+  <footer>
+    <nav class="hud bottom-tools" aria-label="点名工具">
+      <button id="rosterButton"><span>♙</span>名单与 VIP</button><button id="historyButton"><span>≡</span>点名记录</button><button id="nextRound"><span>↻</span>刷新轮次</button><button id="settingsButton"><span>⚙</span>控制台</button>
+    </nav>
+    <div class="hint">按住拖动 · 滚轮缩放 · 投掷后双击棋盘跳过本批动画 <span>50 个姓名格 + 10 个宝箱格</span></div>
+    <section class="hud roll-panel" aria-label="掷骰操作区">
+      <div class="roll-status"><span id="rollStatus">准备就绪</span><button id="animationSettings" type="button">显示与动画</button></div>
+      <div class="roll-controls"><div class="die-wrap"><div class="dice" id="dice" aria-label="掷骰图标"><svg viewBox="0 0 64 68" aria-hidden="true"><path d="M5 21Q3 18 8 15L29 3Q32 1 36 3L57 16Q61 18 60 23L59 48Q59 51 56 53L35 65Q32 67 28 65L7 53Q4 51 4 47Z" fill="#edddc1"/><path d="M9 19L32 6L55 19L32 32Z" fill="#df2440"/><path d="M8 24L29 36L29 61L8 49Z" fill="#970c29"/><path d="M35 36L56 24L56 49L35 61Z" fill="#b11230"/><g fill="#fff8e9"><ellipse cx="32" cy="19" rx="4" ry="2.7"/><ellipse cx="16" cy="36" rx="2.5" ry="3"/><ellipse cx="23" cy="50" rx="2.5" ry="3"/><ellipse cx="42" cy="48" rx="2.5" ry="3"/><ellipse cx="50" cy="34" rx="2.5" ry="3"/></g></svg></div></div><button id="rollButton">掷骰<span id="rollCaption">计划点名 1 人</span></button></div>
+      <div class="count-control"><button id="countMinus" aria-label="减少骰子数量">－</button><span>骰子 <b id="diceCount">1</b> 颗</span><button id="countPlus" aria-label="增加骰子数量">＋</button></div>
+    </section>
+  </footer>
+  <dialog id="dialog"><div class="dialog-head"><h2 id="dialogTitle"></h2><button id="closeDialog" aria-label="关闭">×</button></div><div id="dialogBody"></div></dialog>
+</body>
+</html>

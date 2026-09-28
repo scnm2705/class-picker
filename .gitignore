@@ -1,0 +1,21 @@
+.venv/
+__pycache__/
+*.py[cod]
+python_build*/
+build/
+dist/
+node_modules/
+*.exe
+*.zip
+# Local class data, backups, passwords, and runtime reports
+data/
+backups/
+班级随机点名器_V1.0/
+data_python.json*
+data.json*
+storage_config.json
+*.bak
+*.log
+webview-*.json
+.env
+.env.*
